@@ -5,7 +5,7 @@ class Singleton(type):
         if cls not in cls._instances:
             cls._instances[cls] = super(Singleton,cls).__call__(*args, **kwargs)
         return cls._instances[cls]
-class InstagramPackage:
+class Package:
     def __init__(self, price): 
         self._price = price 
 
@@ -19,7 +19,7 @@ class LanguageAdaptor():
     def __getattr__(self, attr):
         return getattr(self._object, attr)
 class User:
-    def __init__(self, name:str, packege:InstagramPackage, lang:LanguageAdaptor):
+    def __init__(self, name:str, packege:Package, lang:LanguageAdaptor):
         self.name = name
         self.package = packege
         self.lang = lang
@@ -28,7 +28,7 @@ class User:
         print('Dear {}, {} have notification for you--> notif is {}'.format(self.name, company.name, notif))
 
 
-class InstagramCompany(metaclass=Singleton):
+class Company(metaclass=Singleton):
     # constructor method
     def __init__(self):
         self.name = 'insta'
@@ -59,21 +59,25 @@ class InstagramCompany(metaclass=Singleton):
         for user in self.__subscribers:
             print('user is {} and package price is {} and {}'.format(user.name, user.package.get_price(), user.lang.write))
 
-class FeaturePackage1(InstagramPackage):
+class FeaturePackage1(Package):
     
     def __init__(self, price):
         self._price = price
 
     def get_price(self):
         return self._price.get_price() + 2000
-class FeaturePackage2(InstagramPackage):
+class FeaturePackage2(Package):
     
     def __init__(self, price):
         self._price = price
 
     def get_price(self):
         return self._price.get_price() + 5000
-class PersianLang():
+class Language():
+    def __init__(self):
+        self.language = ''
+
+class PersianLang(Language):
     def __init__(self):
         self.language = 'Perisan'
     def write_farsi(self):
@@ -108,7 +112,7 @@ def test_observer(insta_1, users):
 
 def test_decorator():
     print('# test decorator')
-    p = InstagramPackage(1000)
+    p = Package(1000)
     p1 = FeaturePackage1(p)
     p2 = FeaturePackage2(FeaturePackage1(p))
     print("base package price is {}".format(p.get_price()))
@@ -118,8 +122,8 @@ def test_decorator():
  
 def test_singleton():
     print('# test singleton')
-    insta_1 = InstagramCompany()
-    insta_2 = InstagramCompany()
+    insta_1 = Company()
+    insta_2 = Company()
     insta_1.name = 'telegram'
     insta_2.name = 'insta'
     print(insta_1)
